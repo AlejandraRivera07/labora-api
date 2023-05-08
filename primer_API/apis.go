@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	//"strings"
 	"time"
@@ -122,8 +123,12 @@ func createItem(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Item creado correctamente"))
 }
 
-/*func updateItem(w http.ResponseWriter, r *http.Request) {
+func updateItem(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
+	idStr := vars["id"]
+
+	// Convertir el ID de string a int
+	id, _ := strconv.Atoi(idStr)
 	var itemUpdate Item
 	err := json.NewDecoder(r.Body).Decode(&itemUpdate)
 	defer r.Body.Close()
@@ -133,7 +138,7 @@ func createItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for i, item := range items {
-		if item.ID == vars["id"] {
+		if item.ID == id {
 			items[i] = itemUpdate
 			w.Write([]byte("Item actualizado correctamente"))
 			return
@@ -146,9 +151,12 @@ func createItem(w http.ResponseWriter, r *http.Request) {
 func deleteItem(w http.ResponseWriter, r *http.Request) {
 	// TODO Función para eliminar un elemento
 	vars := mux.Vars(r)
+	idStr := vars["id"]
 
+	// Convertir el ID de string a int
+	id, _ := strconv.Atoi(idStr)
 	for i, item := range items {
-		if item.ID == vars["id"] {
+		if item.ID == id {
 			nuevoSlice := make([]Item, len(items)-1)
 
 			nuevoSlice = append(items[:i], items[i+1:]...)
@@ -175,7 +183,7 @@ func getItemByName(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(&Item{})
-}*/
+}
 
 func main() {
 	router := mux.NewRouter()
@@ -193,5 +201,5 @@ func main() {
 	fmt.Printf("Escuchando en %s. Presiona CTRL + C para salir", direccion)
 	log.Fatal(servidor.ListenAndServe())
 	// listen to port
-	http.ListenAndServe(":8080", nil)
+	//http.ListenAndServe(":8080", nil)
 }
