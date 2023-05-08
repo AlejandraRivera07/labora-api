@@ -190,6 +190,10 @@ func main() {
 
 	router.HandleFunc("/items", obtenerItems).Methods("GET")
 	router.HandleFunc("/items/{id}", buscarID).Methods("GET")
+	router.HandleFunc("/items", createItem).Methods("POST")
+	router.HandleFunc("/items/{id}", updateItem).Methods("PUT")
+	router.HandleFunc("/items/{id}", deleteItem).Methods("DELETE")
+	router.HandleFunc("/items/get-by-name/", getItemByName).Methods("GET")
 	direccion := ":8080"
 	servidor := &http.Server{
 		Handler: router,
