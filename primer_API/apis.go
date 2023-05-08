@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+
+	//"strings"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -104,6 +106,76 @@ func buscarID(response http.ResponseWriter, request *http.Request) {
 	response.Write([]byte(jsonData))
 
 }
+
+func createItem(w http.ResponseWriter, r *http.Request) {
+	var item Item
+	err := json.NewDecoder(r.Body).Decode(&item)
+	defer r.Body.Close()
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	items = append(items, item)
+
+	w.Write([]byte("Item creado correctamente"))
+}
+
+/*func updateItem(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	var itemUpdate Item
+	err := json.NewDecoder(r.Body).Decode(&itemUpdate)
+	defer r.Body.Close()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	for i, item := range items {
+		if item.ID == vars["id"] {
+			items[i] = itemUpdate
+			w.Write([]byte("Item actualizado correctamente"))
+			return
+		}
+	}
+
+	w.Write([]byte("No se pudo actualizar el item"))
+}
+
+func deleteItem(w http.ResponseWriter, r *http.Request) {
+	// TODO Función para eliminar un elemento
+	vars := mux.Vars(r)
+
+	for i, item := range items {
+		if item.ID == vars["id"] {
+			nuevoSlice := make([]Item, len(items)-1)
+
+			nuevoSlice = append(items[:i], items[i+1:]...)
+
+			items = nuevoSlice
+			w.Write([]byte("Item eliminado correctamente"))
+			return
+		}
+	}
+
+	w.Write([]byte("Item no pudo ser eliminado"))
+}
+
+func getItemByName(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	variables := r.URL.Query()
+	name := variables.Get("name")
+
+	for _, item := range items {
+		if strings.ToLower(item.Name) == strings.ToLower(name) {
+			json.NewEncoder(w).Encode(item)
+			return
+		}
+	}
+
+	json.NewEncoder(w).Encode(&Item{})
+}*/
 
 func main() {
 	router := mux.NewRouter()
