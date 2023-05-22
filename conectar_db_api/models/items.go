@@ -11,48 +11,15 @@ type Item struct {
 	Product      string `json:"product"`      // Producto del pedido
 	Quantity     int    `json:"quantity"`     // Cantidad del producto en el pedido
 	Price        int    `json:"price"`        // Precio del producto en el pedido
+	Views        int     `json:"views"`        // Cantidad de veces que se ve in item
+	TotalPrice   float64 `json:"totalPrice"`
 }
 
-// Lista de ítems, inicialmente con valores hardcodeados
-var Items []Item = []Item{
-	{
-		ID:   1,
-		Name: "Camila",
-	},
-	{
-		ID:   2,
-		Name: "Paula",
-	},
-	{
-		ID:   3,
-		Name: "Alejandra",
-	},
-	{
-		ID:   4,
-		Name: "Andres",
-	},
-	{
-		ID:   5,
-		Name: "Luis",
-	},
-	{
-		ID:   6,
-		Name: "Camilo",
-	},
-	{
-		ID:   7,
-		Name: "Luisa",
-	},
-	{
-		ID:   8,
-		Name: "Juan",
-	},
-	{
-		ID:   9,
-		Name: "Liz",
-	},
-	{
-		ID:   10,
-		Name: "Carmen",
-	},
+// calculo del precio total de un item
+func (item *Item) CalculateTotalPrice() float64 {
+	TotalPrice := float64(item.Price) * float64(item.Quantity)
+
+	item.TotalPrice = math.Round(TotalPrice*100) / 100
+	return item.TotalPrice
 }
+
