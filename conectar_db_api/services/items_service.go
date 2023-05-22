@@ -93,3 +93,42 @@ func UpdateItemByID(id int, item models.Item) (models.Item, error) {
 	}
 	return UpdateItem, nil
 }
+
+func DeletItemByID(id int, item models.Item) (models.Item, error) {
+
+	_, err := Db.Exec("DELETE FROM items WHERE id = $1 ",
+		item.CustomerName, item.OrderDate, item.Product, item.Quantity, item.Price, item.Views, id)
+
+	if err != nil {
+		return models.Item{}, err
+	}
+
+	return item, nil
+
+}
+
+func CreateItem(item models.Item) (models.Item, error) {
+	//item.CalculateTotalPrice()
+	_, err := Db.Exec("INSERT INTO items (customer_name, order_date, product, quantity, price,views_counter)",
+		item.CustomerName, item.OrderDate, item.Product, item.Quantity, item.Price, item.Views)
+
+	if err != nil {
+		return models.Item{}, err
+	}
+
+	return item, nil
+}
+
+func ViewCounter(id int, mu *sync.Mutex) error {
+	mu.Lock()
+
+	query := "UPDATE items SET views_counter = views_counter + 1 WHERE id = $1"
+	_, err := Db.Exec(query, id)
+	if err != nil {
+		return err
+	}
+
+	mu.Unlock()
+	return nil
+}
+
